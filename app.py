@@ -62,6 +62,37 @@ def view_passengers():
 	finally:
 		cursor.close()
 
+
+@app.route('/view_pilots', methods=['GET', 'POST'])
+def view_pilots():
+	try:
+		cursor = db_connection.cursor()
+		cursor.execute('SELECT * FROM person join pilot on person.personID = pilot.personID')
+		people = cursor.fetchall()
+		column_names = [desc[0] for desc in cursor.description]
+		# print(people)
+		return render_template('view_pilots.html', people=people, headers=column_names)
+	except Exception as e:
+		flash(f"Error fetching pilots: {e}")
+		return redirect(url_for('index'))
+	finally:
+		cursor.close()
+
+@app.route('/view_flights', methods=['GET', 'POST'])
+def view_flights():
+	try:
+		cursor = db_connection.cursor()
+		cursor.execute('SELECT * FROM flight')
+		flights = cursor.fetchall()
+		column_names = [desc[0] for desc in cursor.description]
+		# print(flights)
+		return render_template('view_flights.html', flights=flights, headers=column_names)
+	except Exception as e:
+		flash(f"Error fetching flights: {e}")
+		return redirect(url_for('index'))
+	finally:
+		cursor.close()
+
 @app.route('/flights_in_the_air')
 def flights_in_the_air():
     try:
@@ -75,6 +106,20 @@ def flights_in_the_air():
         return redirect(url_for('index'))
     finally:
         cursor.close()
+
+@app.route('/flights_on_the_ground')
+def flights_on_the_ground():
+	try:
+		cursor = db_connection.cursor()
+		cursor.execute('SELECT * FROM flights_on_the_ground')
+		flights = cursor.fetchall()
+		column_names = [desc[0] for desc in cursor.description]
+		return render_template('flights_on_the_ground.html', flights=flights, headers=column_names)
+	except Exception as e:
+		flash(f"Error fetching flights on the ground: {e}")
+		return redirect(url_for('index'))
+	finally:
+		cursor.close()
 
 
 #helper method for forms with possible null or empty values

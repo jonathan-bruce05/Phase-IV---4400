@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Flights in the Air</h1>
+    <h1>All Flights</h1>
     {% if flights %}
         <table border="1">
             <tr>
@@ -18,9 +18,14 @@
             {% endfor %}
         </table>
     {% else %}
-        <p>No flights in the air in the database.</p>
+        <p>No flights found in the database.</p>
     {% endif %}
     <br>
     <a href="{{ url_for('index') }}"><button>Back to Home</button></a>
-    <a href="{{ url_for('view_flights') }}"><button>Back to Flights</button></a>
+    <a href="{{ url_for('flights_in_the_air') }}">
+        <button style="width: 100%;">View Flights in the Air</button>
+    </a>
+    <a href="{{ url_for('flights_on_the_ground') }}">
+        <button style="width: 100%;">View Flights on the Ground</button>
+    </a>
 {% endblock %}

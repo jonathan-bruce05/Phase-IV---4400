@@ -1,15 +1,15 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Flights in the Air</h1>
-    {% if flights %}
+    <h1>All Pilots</h1>
+    {% if people %}
         <table border="1">
             <tr>
                 {% for header in headers %}
                     <th>{{ header }}</th>
                 {% endfor %}
             </tr>
-            {% for row in flights %}
+            {% for row in people %}
                 <tr>
                     {% for cell in row %}
                         <td>{{ cell }}</td>
@@ -18,9 +18,8 @@
             {% endfor %}
         </table>
     {% else %}
-        <p>No flights in the air in the database.</p>
+        <p>No pilots found in the database.</p>
     {% endif %}
     <br>
     <a href="{{ url_for('index') }}"><button>Back to Home</button></a>
-    <a href="{{ url_for('view_flights') }}"><button>Back to Flights</button></a>
 {% endblock %}
