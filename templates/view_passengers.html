@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>All Passengers</h1>
+    {% if people %}
+        <table border="1">
+            <tr>
+                {% for header in headers %}
+                    <th>{{ header }}</th>
+                {% endfor %}
+            </tr>
+            {% for row in people %}
+                <tr>
+                    {% for cell in row %}
+                        <td>{{ cell }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No passengers found in the database.</p>
+    {% endif %}
+    <br>
+    <a href="{{ url_for('index') }}"><button>Back to Home</button></a>
+{% endblock %}

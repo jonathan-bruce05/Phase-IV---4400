@@ -1,0 +1,37 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Welcome to the Database Manager</h1>
+
+    <p>Select a section to view or manage data:</p>
+
+    <div style="display: flex; flex-direction: column; gap: 10px; max-width: 300px;">
+        <a href="{{ url_for('view_people') }}">
+            <button style="width: 100%;">View All People</button>
+        </a>
+
+		<a href="{{ url_for('view_passengers') }}">
+            <button style="width: 100%;">View Passengers</button>
+        </a>
+		<a href="{{ url_for('flights_in_the_air') }}">
+            <button style="width: 100%;">View Flights in the Air</button>
+        </a>
+		
+    </div>
+
+{% endblock %}
+
+<!--I'll come back to this soon(tm)
+        
+
+        <a href="{{ url_for('view_pilots') }}">
+            <button style="width: 100%;">View Pilots</button>
+        </a>
+
+        <a href="{{ url_for('add_person') }}">
+            <button style="width: 100%;">Add a New Person</button>
+        </a>
+		-->
+
+<!--

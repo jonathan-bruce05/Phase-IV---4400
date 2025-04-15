@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Flights in the air</h1>
+    {% if flights %}
+        <table border="1">
+            <tr>
+                {% for header in headers %}
+                    <th>{{ header }}</th>
+                {% endfor %}
+            </tr>
+            {% for row in flights %}
+                <tr>
+                    {% for cell in row %}
+                        <td>{{ cell }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No flights in the air in the database.</p>
+    {% endif %}
+    <br>
+    <a href="{{ url_for('index') }}"><button>Back to Home</button></a>
+{% endblock %}
