@@ -166,7 +166,20 @@ def view_flights():
 	finally:
 		cursor.close()
 
-#TODO: route_summary view
+#route_summary view
+@app.route('/route_summary', methods=['GET', 'POST'])
+def route_summary():
+	try:
+		cursor = db_connection.cursor()
+		cursor.execute('SELECT * FROM route_summary')
+		routes = cursor.fetchall()
+		column_names = [desc[0] for desc in cursor.description]
+		return render_template('route_summary.html', routes=routes, headers=column_names)
+	except Exception as e:
+		flash(f"Error fetching route summary: {e}")
+		return redirect(url_for('index'))
+	finally:
+		cursor.close()
 
 		
 #TODO: offer_flight	
@@ -209,16 +222,54 @@ def flights_on_the_ground():
 
 
 
-#TODO: airplanes page
-
+#airplanes page
+@app.route('/view_airplanes', methods=['GET', 'POST'])
+def view_airplanes():
+	try:
+		cursor = db_connection.cursor()
+		cursor.execute('SELECT * FROM airplane')
+		airplanes = cursor.fetchall()
+		column_names = [desc[0] for desc in cursor.description]
+		return render_template('view_airplanes.html', airplanes=airplanes, headers=column_names)
+	except Exception as e:
+		flash(f"Error fetching airplanes: {e}")
+		return redirect(url_for('index'))
+	finally:
+		cursor.close()
 
 #TODO: add_airplane
 
 
-#TODO: airport page
+#airports page
+@app.route('/view_airports', methods=['GET', 'POST'])
+def view_airports():
+	try:
+		cursor = db_connection.cursor()
+		cursor.execute('SELECT * FROM airport')
+		airports = cursor.fetchall()
+		column_names = [desc[0] for desc in cursor.description]
+		return render_template('view_airports.html', airports=airports, headers=column_names)
+	except Exception as e:
+		flash(f"Error fetching airports: {e}")
+		return redirect(url_for('index'))
+	finally:
+		cursor.close()
 
 
-#TODO: alternate_airports view
+#alternative airports view
+@app.route('/alternative_airports', methods=['GET', 'POST'])
+def alternative_airports():
+	try:
+		cursor = db_connection.cursor()
+		cursor.execute('SELECT * FROM alternative_airports')
+		airports = cursor.fetchall()
+		column_names = [desc[0] for desc in cursor.description]
+		return render_template('alternative_airports.html', airports=airports, headers=column_names)
+	except Exception as e:
+		flash(f"Error fetching alternative airports: {e}")
+		return redirect(url_for('index'))
+	finally:
+		cursor.close()
 
 
 #TODO: add_airport
