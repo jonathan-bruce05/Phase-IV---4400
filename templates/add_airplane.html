@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Add New Airplane</h1>
+<h2>Don't have a value? Please leave it blank or enter NULL or 0</h2>
+<form method="POST">
+    <label>Airline ID: <input type="text" name="airlineID" required></label><br>
+    <label>Tail Num: <input type="text" name="tailNum" required></label><br>
+    <label>Seat Capacity: <input type="number" name="seats" required></label><br>
+    <label>Speed: <input type="number" name="speed" required></label><br>
+    <label>Location ID: <input type="text" name="locID" required></label><br>
+    <label>Plane Type: <input type="text" name="type" required></label><br>
+    <label>Maintenanced: <input type="checkbox" name="maintenanced" required></label><br>
+    <label>Model: <input type="text" name="model" required></label><br>
+    <label>Neo: <input type="checkbox" name="neo" required></label><br><br>
+
+    <button type="submit">Submit</button>
+    <a href="{{ url_for('view_airplanes') }}"><button type="button">Cancel</button></a>
+</form>
+{% endblock %}

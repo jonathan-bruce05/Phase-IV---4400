@@ -105,6 +105,7 @@ def add_person():
 
 #TODO: people_on_the_ground view
 
+#passengers page
 @app.route('/view_passengers', methods=['GET', 'POST'])
 def view_passengers():
 	try:
@@ -237,8 +238,54 @@ def view_airplanes():
 	finally:
 		cursor.close()
 
-#TODO: add_airplane
+#TODO: fix add_airplane
+@app.route('/add_airplane', methods=['GET', 'POST'])
+def add_airplane():
+	if request.method == 'POST':
+		cursor = None
+		try:
+			airlineID = normalize(request.form['airlineID'])
+			tailNum = normalize(request.form['tailNum'])
+			seats = normalize(request.form['seats'])
+			speed = normalize(request.form['speed'])
+			locID = normalize(request.form['locID'])
+			plane_type = normalize(request.form['type'])
+			maintenanced = normalize(request.form['maintenanced'])
+			model = normalize(request.form['model'])
+			neo = normalize(request.form['neo'])
 
+			#fix ints
+			seats = int(seats) if seats is not None else None
+			speed = int(speed) if speed is not None else None
+
+			#checkbox for neo and maintenanced?
+			neo = True if neo and neo.lower() == 'on' else False
+			maintenanced = True if maintenanced and maintenanced.lower() == 'on' else False
+
+
+			cursor = db_connection.cursor()
+			cursor.callproc('add_airplane', (airlineID, tailNum, seats, speed, locID, plane_type, maintenanced, model, neo))
+
+			#db_connection.commit()
+
+			result = list(cursor.fetchall())
+			#print(result)
+			if cursor.description:
+				column_names = [desc[0] for desc in cursor.description]
+			#print(column_names)
+			if result and column_names:
+				if 'error_message' in column_names:
+					flash(result[0][0].strip("(),'"))
+			else:
+				flash('Airplane added successfully!')
+		except Exception as e:
+			flash(f"Error adding airplane: {e}")
+		finally:
+			if cursor:
+				cursor.close()
+			db_connection.commit()
+		return redirect(url_for('view_airplanes'))
+	return render_template('add_airplane.html')
 
 #airports page
 @app.route('/view_airports', methods=['GET', 'POST'])
