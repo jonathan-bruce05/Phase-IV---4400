@@ -10,10 +10,23 @@
     <label>Speed: <input type="number" name="speed" required></label><br>
     <label>Location ID: <input type="text" name="locID" required></label><br>
     <label>Plane Type: <input type="text" name="type" required></label><br>
-    <label>Maintenanced: <input type="checkbox" name="maintenanced" required></label><br>
-    <label>Model: <input type="text" name="model" required></label><br>
-    <label>Neo: <input type="checkbox" name="neo" required></label><br><br>
-
+    <label for="Maintenanced">Maintenanced:</label>
+        <input list="maintenanced-options" name="maintenanced" placeholder="True, False, or NULL" required>
+        <datalist id="maintenanced-options">
+            <option value="True">
+            <option value="False">
+            <option value="NULL">
+        </datalist>
+        <br>
+    <label>Model: <input type="text" name="model"></label><br>
+    <label for="neo">Neo:</label>
+        <input list="neo-options" name="neo" placeholder="True, False, or NULL" required>
+        <datalist id="neo-options">
+            <option value="True">
+            <option value="False">
+            <option value="NULL">
+        </datalist>
+        <br>
     <button type="submit">Submit</button>
     <a href="{{ url_for('view_airplanes') }}"><button type="button">Cancel</button></a>
 </form>

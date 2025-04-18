@@ -241,8 +241,9 @@ def view_airplanes():
 #TODO: fix add_airplane
 @app.route('/add_airplane', methods=['GET', 'POST'])
 def add_airplane():
+
 	if request.method == 'POST':
-		cursor = None
+		cursor = None #this is here from when I was debugging add_person, I'll remove it later.
 		try:
 			airlineID = normalize(request.form['airlineID'])
 			tailNum = normalize(request.form['tailNum'])
@@ -253,14 +254,16 @@ def add_airplane():
 			maintenanced = normalize(request.form['maintenanced'])
 			model = normalize(request.form['model'])
 			neo = normalize(request.form['neo'])
-
 			#fix ints
 			seats = int(seats) if seats is not None else None
 			speed = int(speed) if speed is not None else None
 
-			#checkbox for neo and maintenanced?
-			neo = True if neo and neo.lower() == 'on' else False
-			maintenanced = True if maintenanced and maintenanced.lower() == 'on' else False
+			#fix maintenanced and neo
+			if maintenanced is not None:
+				maintenanced = 1 if maintenanced.lower() == 'true' else 0 if maintenanced.lower() == 'false' else None
+			if neo is not None:
+				neo = 1 if neo.lower() == 'true' else 0 if neo.lower() == 'false' else None
+
 
 
 			cursor = db_connection.cursor()
