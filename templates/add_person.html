@@ -4,11 +4,11 @@
 <h1>Add New Person</h1>
 <h2>Don't have a value? Please leave it blank or enter NULL</h2>
 <form method="POST">
-    <label>Person ID: <input type="text" name="personID" required></label><br>
-    <label>First Name: <input type="text" name="first_name" required></label><br>
-    <label>Last Name: <input type="text" name="last_name" required></label><br>
-    <label>Location ID: <input type="text" name="locationID" required></label><br>
-    <label>Tax ID: <input type="text" name="taxID" required></label><br>
+    <label>Person ID: <input type="text" name="personID" maxlength="50" required></label><br>
+    <label>First Name: <input type="text" name="first_name" maxlength="100" required></label><br>
+    <label>Last Name: <input type="text" name="last_name" maxlength="100" required></label><br>
+    <label>Location ID: <input type="text" name="locationID" maxlength="50" required></label><br>
+    <label>Tax ID: <input type="text" name="taxID" maxlength="50" required></label><br>
     <label>Experience: <input type="text" name="experience" required></label><br>
     <label>Miles: <input type="text" name="miles" required></label><br>
     <label>Funds: <input type="text" name="funds" required></label><br><br>

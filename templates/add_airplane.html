@@ -4,12 +4,12 @@
 <h1>Add New Airplane</h1>
 <h2>Don't have a value? Please leave it blank or enter NULL or 0</h2>
 <form method="POST">
-    <label>Airline ID: <input type="text" name="airlineID" required></label><br>
-    <label>Tail Num: <input type="text" name="tailNum" required></label><br>
+    <label>Airline ID: <input type="text" name="airlineID" maxlength="50" required></label><br>
+    <label>Tail Num: <input type="text" name="tailNum" maxlength="50" required></label><br>
     <label>Seat Capacity: <input type="number" name="seats" required></label><br>
     <label>Speed: <input type="number" name="speed" required></label><br>
-    <label>Location ID: <input type="text" name="locID" required></label><br>
-    <label>Plane Type: <input type="text" name="type" required></label><br>
+    <label>Location ID: <input type="text" name="locID" maxlength="50" required></label><br>
+    <label>Plane Type: <input type="text" name="type" maxlength="100" required></label><br>
     <label for="Maintenanced">Maintenanced:</label>
         <input list="maintenanced-options" name="maintenanced" placeholder="True, False, or NULL" required>
         <datalist id="maintenanced-options">
@@ -18,7 +18,7 @@
             <option value="NULL">
         </datalist>
         <br>
-    <label>Model: <input type="text" name="model"></label><br>
+    <label>Model: <input type="text" maxlength="50" name="model"></label><br>
     <label for="neo">Neo:</label>
         <input list="neo-options" name="neo" placeholder="True, False, or NULL" required>
         <datalist id="neo-options">

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Add New Airport</h1>
+<h2>Don't have a value? Please leave it blank or enter NULL</h2>
+<form method="POST">
+    <label>Airport ID (3 letter code): <input type="text" name="airportID" maxlength="3" required></label><br>
+    <label>Airport Name: <input type="text" name="name" maxlength="200" required></label><br>
+    <label>City: <input type="text" name="city" maxlength="100" required></label><br>
+    <label>State: <input type="text" name="state" maxlength="100" required></label><br>
+    <label>Country (3 letter code): <input type="text" name="country" maxlength="3" required></label><br>
+    <label>Location ID: <input type="text" name="locID" maxlength="50" required></label>
+
+    <button type="submit">Submit</button>
+    <a href="{{ url_for('view_airplanes') }}"><button type="button">Cancel</button></a>
+</form>
+{% endblock %}

@@ -238,7 +238,7 @@ def view_airplanes():
 	finally:
 		cursor.close()
 
-#TODO: fix add_airplane
+#add_airplane page
 @app.route('/add_airplane', methods=['GET', 'POST'])
 def add_airplane():
 
@@ -322,8 +322,44 @@ def alternative_airports():
 		cursor.close()
 
 
-#TODO: add_airport
+#add_airport page
+@app.route('/add_airport', methods=['GET', 'POST'])
+def add_airport():
+	if request.method == 'POST':
+		cursor = None
+		try:
+			airportID = normalize(request.form['airportID'])
+			name = normalize(request.form['name'])
+			city = normalize(request.form['city'])
+			state = normalize(request.form['state'])
+			country = normalize(request.form['country'])
+			locID = normalize(request.form['locID'])
+			#everything is a string so should be fixed
 
+
+			cursor = db_connection.cursor()
+			cursor.callproc('add_airport', (airportID, name, city, state, country, locID))
+
+			#db_connection.commit()
+
+			result = list(cursor.fetchall())
+			#print(result)
+			if cursor.description:
+				column_names = [desc[0] for desc in cursor.description]
+			#print(column_names)
+			if result and column_names:
+				if 'error_message' in column_names:
+					flash(result[0][0].strip("(),'"))
+			else:
+				flash('Airport added successfully!')
+		except Exception as e:
+			flash(f"Error adding airport: {e}")
+		finally:
+			if cursor:
+				cursor.close()
+			db_connection.commit()
+		return redirect(url_for('view_airports'))
+	return render_template('add_airport.html')
 
 
 
