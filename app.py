@@ -121,10 +121,71 @@ def view_passengers():
 	finally:
 		cursor.close()
 
-#TODO: passengers_board
+#passengers_board page
+@app.route('/passengers_board', methods=['GET', 'POST'])
+def passengers_board():
+	if request.method == 'POST':
+		cursor = None
+		try:
+			flightID = normalize(request.form['flightID'])
 
+			cursor = db_connection.cursor()
+			#the command next to flightID is load bearing. Do not remove it.
+			cursor.callproc('passengers_board', (flightID,))
+
+			#db_connection.commit()
+
+			result = list(cursor.fetchall())
+			#print(result)
+			if cursor.description:
+				column_names = [desc[0] for desc in cursor.description]
+			#print(column_names)
+			if result and column_names:
+				if 'error_message' in column_names:
+					flash(result[0][0].strip("(),'"))
+			else:
+				flash('Passengers have boarded successfully!')
+		except Exception as e:
+			flash(f"Error boarding passengers: {e}")
+		finally:
+			if cursor:
+				cursor.close()
+			db_connection.commit()
+		return redirect(url_for('view_passengers'))
+	return render_template('passengers_board.html')
 
 #TODO: passengers_disembark
+@app.route('/passengers_disembark', methods=['GET', 'POST'])
+def passengers_disembark():
+	if request.method == 'POST':
+		cursor = None
+		try:
+			flightID = normalize(request.form['flightID'])
+
+			cursor = db_connection.cursor()
+			#the command next to flightID is load bearing. Do not remove it.
+			cursor.callproc('passengers_disembark', (flightID,))
+
+			#db_connection.commit()
+
+			result = list(cursor.fetchall())
+			#print(result)
+			if cursor.description:
+				column_names = [desc[0] for desc in cursor.description]
+			#print(column_names)
+			if result and column_names:
+				if 'error_message' in column_names:
+					flash(result[0][0].strip("(),'"))
+			else:
+				flash('Passengers have disembarked successfully!')
+		except Exception as e:
+			flash(f"Error disembarking passengers: {e}")
+		finally:
+			if cursor:
+				cursor.close()
+			db_connection.commit()
+		return redirect(url_for('view_passengers'))
+	return render_template('passengers_disembark.html')
 
 
 @app.route('/view_pilots', methods=['GET', 'POST'])
