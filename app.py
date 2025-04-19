@@ -180,7 +180,7 @@ def passengers_board():
 		return redirect(url_for('view_passengers'))
 	return render_template('passengers_board.html')
 
-#TODO: passengers_disembark
+#passengers_disembark page
 @app.route('/passengers_disembark', methods=['GET', 'POST'])
 def passengers_disembark():
 	if request.method == 'POST':
