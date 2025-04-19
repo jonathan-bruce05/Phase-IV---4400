@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Offer Flight</h1>
+<h2>Don't have a value? Please leave it blank or enter NULL</h2>
+<form method="POST">
+    <label>Flight ID: <input type="text" name="flightID" maxlength="50" required></label><br>
+    <label>Route ID: <input type="text" name="routeID" maxlength="50" required></label><br>
+    <label>Support Airline: <input type="text" name="support_airline" maxlength="50" required></label><br>
+    <label>Support Tail: <input type="text" name="support_tail" maxlength="50" required></label><br>
+    <label>Progress: <input type="text" name="progress" required></label><br>
+    <label>Next Time:
+    <input type="number" name="hours" min="0" max="23" placeholder="HH">
+    :
+    <input type="number" name="minutes" min="0" max="59" placeholder="MM">
+    :
+    <input type="number" name="seconds" min="0" max="59" placeholder="SS"></label><br>
+
+    <label>Cost: <input type="text" name="cost" required></label><br>
+
+    
+
+    <button type="submit">Submit</button>
+    <a href="{{ url_for('view_people') }}"><button type="button">Cancel</button></a>
+</form>
+{% endblock %}
