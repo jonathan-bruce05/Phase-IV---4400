@@ -303,7 +303,49 @@ def route_summary():
 
 		
 #TODO: offer_flight
+@app.route('/offer_flight', methods=['GET', 'POST'])
+def offer_flight():
+	if request.method == 'POST':
+		cursor = None
+		try:
+			flightID = normalize(request.form['flightID'])
+			routeID = normalize(request.form['routeID'])
+			support_airline = normalize(request.form['support_airline'])
+			support_tail = normalize(request.form['support_tail'])
+			progress = normalize(request.form['progress'])
+			hours = normalize(request.form['hours'])
+			minutes = normalize(request.form['minutes'])
+			seconds = normalize(request.form['seconds'])
+			cost = normalize(request.form['cost'])
 
+			next_time = hours + ':' + minutes + ':' + seconds if hours and minutes and seconds else None
+
+			#fix ints
+			progress = int(progress) if progress is not None else None
+			cost = int(cost) if cost is not None else None
+
+			cursor = db_connection.cursor()
+			cursor.callproc('offer_flight', (flightID, routeID, support_airline, support_tail, progress, next_time, cost))
+			#db_connection.commit()
+
+			result = list(cursor.fetchall())
+			#print(result)
+			if cursor.description:
+				column_names = [desc[0] for desc in cursor.description]
+			#print(column_names)
+			if result and column_names:
+				if 'error_message' in column_names:
+					flash(result[0][0].strip("(),'"))
+			else:
+				flash('Flight added successfully!')
+		except Exception as e:
+			flash(f"Error adding flight: {e}")
+		finally:
+			if cursor:
+				cursor.close()
+			db_connection.commit()
+		return redirect(url_for('view_flights'))
+	return render_template('offer_flight.html')
 
 #TODO: retire_flight
 
