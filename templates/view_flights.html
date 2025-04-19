@@ -31,6 +31,12 @@
     <a href="{{ url_for('route_summary') }}">
         <button style="width: 100%;">View Route Summary</button>
     </a>
+
     <a href="{{ url_for('flight_landing') }}"><button>Land Flight</button></a>
     <a href="{{ url_for('flight_takeoff') }}"><button>Takeoff Flight</button></a>
+
+    <a href="{{ url_for('recycle_crew') }}">
+        <button style="width: 100%;">Recycle Crew</button>
+    </a>
+
 {% endblock %}

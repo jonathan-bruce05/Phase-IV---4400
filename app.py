@@ -235,7 +235,6 @@ def view_pilots():
 #TODO: assign_pilot
 
 
-#TODO: recycle_crew
 
 
 
@@ -254,6 +253,39 @@ def view_flights():
 	finally:
 		cursor.close()
 
+#TODO: recycle_crew
+@app.route('/recycle_crew', methods=['GET', 'POST'])
+def recycle_crew():
+	if request.method == 'POST':
+		cursor = None
+		try:
+			flightID = normalize(request.form['flightID'])
+
+			cursor = db_connection.cursor()
+			#the command next to flightID is load bearing. Do not remove it.
+			cursor.callproc('recycle_crew', (flightID,))
+
+			#db_connection.commit()
+
+			result = list(cursor.fetchall())
+			#print(result)
+			if cursor.description:
+				column_names = [desc[0] for desc in cursor.description]
+			#print(column_names)
+			if result and column_names:
+				if 'error_message' in column_names:
+					flash(result[0][0].strip("(),'"))
+			else:
+				flash('Crew recycled successfully!')
+		except Exception as e:
+			flash(f"Error recycling crew: {e}")
+		finally:
+			if cursor:
+				cursor.close()
+			db_connection.commit()
+		return redirect(url_for('view_flights'))
+	return render_template('recycle_crew.html')
+
 #route_summary view
 @app.route('/route_summary', methods=['GET', 'POST'])
 def route_summary():
@@ -270,7 +302,7 @@ def route_summary():
 		cursor.close()
 
 		
-#TODO: offer_flight	
+#TODO: offer_flight
 
 
 #TODO: retire_flight
