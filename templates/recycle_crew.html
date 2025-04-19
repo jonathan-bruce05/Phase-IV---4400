@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Recycle Crew from a Flight</h1>
+<h2>Don't have a value? Please leave it blank or enter NULL</h2>
+<form method="POST">
+    <label>Flight ID: <input type="text" name="flightID" maxlength="50" required></label><br>
+
+    <button type="submit">Submit</button>
+    <a href="{{ url_for('view_flights') }}"><button type="button">Cancel</button></a>
+</form>
+{% endblock %}
