@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>All People</h1>
+    <h1>People in the Air</h1>
     {% if people %}
         <table border="1">
             <tr>
@@ -18,14 +18,9 @@
             {% endfor %}
         </table>
     {% else %}
-        <p>No people found in the database.</p>
+        <p>No people in the air in the database.</p>
     {% endif %}
     <br>
     <a href="{{ url_for('index') }}"><button>Back to Home</button></a>
-    <a href="{{ url_for('view_passengers') }}"><button>View Passengers</button></a>
-    <a href="{{ url_for('view_pilots') }}"><button>View Pilots</button></a>
-    <a href="{{ url_for('add_person') }}"><button>Add New Person</button></a>
-    <a href="{{ url_for('people_in_the_air') }}"><button>View People in the Air</button></a>
-    <a href="{{ url_for('people_on_the_ground') }}"><button>View People on the Ground</button></a>
-
+    <a href="{{ url_for('view_people') }}"><button>Back to People</button></a>
 {% endblock %}

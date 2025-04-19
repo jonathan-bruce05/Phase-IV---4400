@@ -100,10 +100,36 @@ def add_person():
 		return redirect(url_for('view_people'))
 	return render_template('add_person.html')
 
-#TODO: people_in_the_air view
+# people_in_the_air view
+@app.route('/people_in_the_air')
+def people_in_the_air():
+    try:
+        cursor = db_connection.cursor()
+        cursor.execute('SELECT * FROM people_in_the_air')
+        people = cursor.fetchall()
+        column_names = [desc[0] for desc in cursor.description]
+        return render_template('people_in_the_air.html', people=people, headers=column_names)
+    except Exception as e:
+        flash(f"Error fetching people in the air: {e}")
+        return redirect(url_for('index'))
+    finally:
+        cursor.close()
 
+# people_on_the_ground view
+@app.route('/people_on_the_ground')
+def people_on_the_ground():
+    try:
+        cursor = db_connection.cursor()
+        cursor.execute('SELECT * FROM people_on_the_ground')
+        people = cursor.fetchall()
+        column_names = [desc[0] for desc in cursor.description]
+        return render_template('people_on_the_ground.html', people=people, headers=column_names)
+    except Exception as e:
+        flash(f"Error fetching people on the ground: {e}")
+        return redirect(url_for('index'))
+    finally:
+        cursor.close()
 
-#TODO: people_on_the_ground view
 
 #passengers page
 @app.route('/view_passengers', methods=['GET', 'POST'])
