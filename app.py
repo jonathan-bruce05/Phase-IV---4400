@@ -100,7 +100,7 @@ def add_person():
 		return redirect(url_for('view_people'))
 	return render_template('add_person.html')
 
-# people_in_the_air view
+# people_in_the_air page
 @app.route('/people_in_the_air')
 def people_in_the_air():
     try:
@@ -115,7 +115,7 @@ def people_in_the_air():
     finally:
         cursor.close()
 
-# people_on_the_ground view
+# people_on_the_ground page
 @app.route('/people_on_the_ground')
 def people_on_the_ground():
     try:
@@ -304,9 +304,71 @@ def flights_on_the_ground():
 	finally:
 		cursor.close()
 
-#TODO: flight_landing
+# flight_landing page
+@app.route('/flight_landing', methods=['GET', 'POST'])
+def flight_landing():
+	if request.method == 'POST':
+		cursor = None
+		try:
+			flightID = normalize(request.form['flightID'])
 
-#TODO: flight_takeoff
+			cursor = db_connection.cursor()
+			#the command next to flightID is load bearing. Do not remove it.
+			cursor.callproc('flight_landing', (flightID,))
+
+			#db_connection.commit()
+
+			result = list(cursor.fetchall())
+			#print(result)
+			if cursor.description:
+				column_names = [desc[0] for desc in cursor.description]
+			#print(column_names)
+			if result and column_names:
+				if 'error_message' in column_names:
+					flash(result[0][0].strip("(),'"))
+			else:
+				flash('Flight has landed successfully!')
+		except Exception as e:
+			flash(f"Error landing plane: {e}")
+		finally:
+			if cursor:
+				cursor.close()
+			db_connection.commit()
+		return redirect(url_for('view_flights'))
+	return render_template('flight_landing.html')
+
+# flight_takeoff page
+@app.route('/flight_takeoff', methods=['GET', 'POST'])
+def flight_takeoff():
+	if request.method == 'POST':
+		cursor = None
+		try:
+			flightID = normalize(request.form['flightID'])
+
+			cursor = db_connection.cursor()
+			#the command next to flightID is load bearing. Do not remove it.
+			cursor.callproc('flight_takeoff', (flightID,))
+
+			#db_connection.commit()
+
+			result = list(cursor.fetchall())
+			#print(result)
+			if cursor.description:
+				column_names = [desc[0] for desc in cursor.description]
+			#print(column_names)
+			if result and column_names:
+				if 'error_message' in column_names:
+					flash(result[0][0].strip("(),'"))
+			else:
+				flash('Flight has taken off successfully!')
+		except Exception as e:
+			flash(f"Error landing plane: {e}")
+		finally:
+			if cursor:
+				cursor.close()
+			db_connection.commit()
+		return redirect(url_for('view_flights'))
+	return render_template('flight_takeoff.html')
 
 
 
