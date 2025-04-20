@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+
+{% block title %}Simulation Cycle{% endblock %}
+
+{% block content %}
+<style>
+    .main-buttons {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        margin: 10px 0;
+        background-color: #e9e9ec;
+        border-radius: 8px;
+        padding: 10px;
+        border: 3px solid #2c3e50
+    }
+    .main-buttons a {
+        flex: 1;
+        
+    }
+    .main-buttons button {
+        width: 100%;
+        padding: 15px;
+        font-size: 20px;
+        background-color: #3498db;
+        border: 3px solid #3498db;
+        color: white;
+        font-weight: 600;
+    }
+
+    .sub-text {
+        font-size: 16px;
+        color: #2c3e50;
+        margin-bottom: 10px;
+        font-weight: 600;
+    }
+
+    .main-buttons button:hover {
+        width: 100%;
+        padding: 15px;
+        font-size: 16px;
+        background-color: #3477db;
+        border: 3px solid #3477db;
+    }
+    .routes-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+        margin-top: 10px;
+    }
+    .route-column {
+        background: #e9e9ec;
+        padding: 20px;
+        border-radius: 8px;
+        border: 3px solid #2c3e50;
+    }
+    .route-column h3 {
+        color: #2c3e50;
+        margin-top: 0;
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #2c3e50;
+    }
+    .route-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    .route-list li {
+        
+        margin-top: 2px;
+        margin-bottom: 2px;
+    }
+    .route-list a {
+        color: #3498db;
+        text-decoration: none;
+        display: block;
+        padding: 6px 6px;
+        background-color: #e9e9ec;
+        font-weight: 600;
+        margin-top: 4px;
+        margin-bottom: 4px;
+        
+    }
+    .route-list a:hover {
+        color: #2980b9;
+        background-color: #e2e1e1;
+        border-radius: 5px;
+        font-size: 18px;
+        padding: 3px 3px;
+        margin-top: 2px;
+        margin-bottom: 2px;
+    }
+
+    .authors-container {
+        margin-top: 20px;
+        background-color: #e9e9ec;
+        border-radius: 8px;
+        padding-top: 1px;
+        padding-inline: 10px;
+        color: #2c3e50;
+        padding-bottom: 0px;
+        border: 3px solid #2c3e50;
+    }
+
+    .authors-title {
+        color: #2c3e50;
+        font-weight: 600;
+        padding-top: 2px;
+        padding-bottom: 2px;
+        border-bottom: 2px solid #2c3e50;
+    }
+
+    .authors-list {
+        margin-bottom: 2px;
+        color: #3498db;
+        font-weight: 600;
+    }
+
+    .authors-text {
+        color: #2c3e50;
+        font-weight: 600;
+        padding-top: 0px;
+    }
+</style>
+
+    <h1>Cycle the Simulation</h1>
+    
+    <p class="sub-text">Click below to cycle the simulation.</p>
+    
+    <form method="POST" id="flightForm">
+        <div class="form-section">
+            <h3>Simulation Cycle</h3>
+            <div class="main-buttons">
+                <button type="submit">Cycle Simulation</button>
+            </div>
+            <div class="main-buttons">
+                <a href="{{ url_for('index') }}">
+                    <button type="submit">Cancel</button>
+                </a>
+            </div>
+        </div>
+    </form>
+
+{% endblock %}

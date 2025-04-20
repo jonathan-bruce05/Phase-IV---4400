@@ -39,7 +39,34 @@ def normalize(val):
 def index():
 	return render_template('index.html')
 
-#TODO: simulation cycle
+#simulation cycle page
+@app.route('/simulation_cycle', methods=['GET', 'POST'])
+def simulation_cycle():
+	if request.method == 'POST':
+		cursor = None
+		try:
+			cursor = db_connection.cursor()
+			cursor.callproc('simulation_cycle',())
+			#db_connection.commit()
+
+			result = list(cursor.fetchall())
+			#print(result)
+			if cursor.description:
+				column_names = [desc[0] for desc in cursor.description]
+			#print(column_names)
+			if result and column_names:
+				if 'error_message' in column_names:
+					flash(result[0][0].strip("(),'"))
+			else:
+				flash('Simulation Cycled successfully!')
+		except Exception as e:
+			flash(f"Error cycling simulation: {e}")
+		finally:
+			if cursor:
+				cursor.close()
+			db_connection.commit()
+		return redirect(url_for('index'))
+	return render_template('simulation_cycle.html')
 
 
 @app.route('/view_people', methods=['GET', 'POST'])
@@ -278,7 +305,7 @@ def grant_or_revoke_pilot_license():
 		return redirect(url_for('view_licenses'))
 	return render_template('grant_or_revoke_pilot_license.html')
 
-#TODO: assign_pilot
+#assign_pilot page
 @app.route('/assign_pilot', methods=['GET', 'POST'])
 def assign_pilot():
 	if request.method == 'POST':
