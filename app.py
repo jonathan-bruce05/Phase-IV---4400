@@ -603,15 +603,16 @@ def add_airplane():
 	if request.method == 'POST':
 		cursor = None #this is here from when I was debugging add_person, I'll remove it later.
 		try:
+			print(request.form)
 			airlineID = normalize(request.form['airlineID'])
 			tailNum = normalize(request.form['tailNum'])
 			seats = normalize(request.form['seats'])
 			speed = normalize(request.form['speed'])
 			locID = normalize(request.form['locID'])
-			plane_type = normalize(request.form['type'])
-			maintenanced = normalize(request.form['maintenanced'])
+			plane_type = normalize(request.form['planeType']) if request.form['planeType'] != 'other' else normalize(request.form['custPlaneType'])
+			maintenanced = normalize(request.form['maintenanced']) if request.form['maintenanced'] != 'other' else normalize(request.form['custMaint'])
 			model = normalize(request.form['model'])
-			neo = normalize(request.form['neo'])
+			neo = normalize(request.form['neo']) if request.form['neo'] != 'other' else normalize(request.form['custNeo'])
 			#fix ints
 			seats = int(seats) if seats is not None else None
 			speed = int(speed) if speed is not None else None

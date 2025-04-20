@@ -112,12 +112,30 @@
                 </div>
                 <div class="form-group">
                     <label>Plane Type:</label>
-                    <select name="type" id="planeType" required>
-                        <option value="">Select Type</option>
+                    <select id="planeTypeDrop" onchange="handleDropdownChangeType()" name="planeType" required>
                         <option value="Airbus">Airbus</option>
                         <option value="Boeing">Boeing</option>
-                        <option value="NULL">Other</option>
-                    </select>
+                        <option value="NULL">NULL</option>
+                        <option value="other">Other</option>
+                      </select>
+                      
+                      <div id="custPlaneTypeBox" style="display:none;">
+                        <label for="inputBox">Please specify:</label>
+                        <input type="text" id="inputBox" name="custPlaneType"/>
+                      </div>
+                      
+                      <script>
+                        function handleDropdownChangeType() {
+                          const dropdown = document.getElementById("planeTypeDrop");
+                          const customInputContainer = document.getElementById("custPlaneTypeBox");
+                          if (dropdown.value === "other") {
+                            customInputContainer.style.display = "block";
+                          } else {
+                            customInputContainer.style.display = "none";
+                          }
+                        }
+                      </script>
+
                 </div>
             </div>
         </div>
@@ -127,11 +145,31 @@
             <div class="form-grid">
                 <div class="form-group boeing-field">
                     <label>Maintenanced:</label>
-                    <select name="maintenanced">
+
+                    <select id="maintDrop" onchange="handleDropdownChangeMaint()" name="maintenanced" required>
                         <option value="NULL">NULL</option>
                         <option value="True">True</option>
                         <option value="False">False</option>
-                    </select>
+                        <option value="other">Other</option>
+                      </select>
+                      
+                      <div id="custMaintBox" style="display:none;">
+                        <label for="inputBox">Please specify:</label>
+                        <input type="text" id="inputBox" name="custMaint"/>
+                      </div>
+                      
+                      <script>
+                        function handleDropdownChangeMaint() {
+                          const dropdown = document.getElementById("maintDrop");
+                          const customInputContainer = document.getElementById("custMaintBox");
+                          if (dropdown.value === "other") {
+                            customInputContainer.style.display = "block";
+                          } else {
+                            customInputContainer.style.display = "none";
+                          }
+                        }
+                      </script>
+
                 </div>
                 <div class="form-group boeing-field">
                     <label>Model:</label>
@@ -139,11 +177,30 @@
                 </div>
                 <div class="form-group airbus-field">
                     <label>Neo:</label>
-                    <select name="neo">
+
+                    <select id="neoDrop" onchange="handleDropdownChangeNeo()" name="neo" required>
                         <option value="NULL">NULL</option>
                         <option value="True">True</option>
                         <option value="False">False</option>
-                    </select>
+                        <option value="other">Other</option>
+                      </select>
+                      
+                      <div id="custNeoBox" style="display:none;">
+                        <label for="inputBox">Please specify:</label>
+                        <input type="text" id="inputBox" name="custNeo"/>
+                      </div>
+                      
+                      <script>
+                        function handleDropdownChangeNeo() {
+                          const dropdown = document.getElementById("neoDrop");
+                          const customInputContainer = document.getElementById("custNeoBox");
+                          if (dropdown.value === "other") {
+                            customInputContainer.style.display = "block";
+                          } else {
+                            customInputContainer.style.display = "none";
+                          }
+                        }
+                      </script>
                 </div>
             </div>
         </div>
