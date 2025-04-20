@@ -302,7 +302,7 @@ def route_summary():
 		cursor.close()
 
 		
-#TODO: offer_flight
+#offer_flight page
 @app.route('/offer_flight', methods=['GET', 'POST'])
 def offer_flight():
 	if request.method == 'POST':
@@ -347,8 +347,38 @@ def offer_flight():
 		return redirect(url_for('view_flights'))
 	return render_template('offer_flight.html')
 
-#TODO: retire_flight
+#TODO: retire_flight page
+@app.route('/retire_flight', methods=['GET', 'POST'])
+def retire_flight():
+	if request.method == 'POST':
+		cursor = None
+		try:
+			flightID = normalize(request.form['flightID'])
 
+			cursor = db_connection.cursor()
+			#the comma next to flightID is load bearing. Do not remove it. I don't know why it works but it does.
+			cursor.callproc('retire_flight', (flightID,))
+
+			#db_connection.commit()
+
+			result = list(cursor.fetchall())
+			#print(result)
+			if cursor.description:
+				column_names = [desc[0] for desc in cursor.description]
+			#print(column_names)
+			if result and column_names:
+				if 'error_message' in column_names:
+					flash(result[0][0].strip("(),'"))
+			else:
+				flash('Flight retired successfully!')
+		except Exception as e:
+			flash(f"Error retiring flight: {e}")
+		finally:
+			if cursor:
+				cursor.close()
+			db_connection.commit()
+		return redirect(url_for('view_flights'))
+	return render_template('retire_flight.html')
 
 @app.route('/flights_in_the_air')
 def flights_in_the_air():
