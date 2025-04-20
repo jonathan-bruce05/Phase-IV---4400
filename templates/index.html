@@ -150,10 +150,15 @@
             <h3>People Management</h3>
             <ul class="route-list">
                 <li><a href="{{ url_for('view_pilots') }}">View Pilots</a></li>
+                <li><a href="{{ url_for('view_licenses') }}">View Pilot Licenses</a></li>
+                <li><a href="{{ url_for('grant_or_revoke_pilot_license') }}">Grant or Revoke Pilot License</a></li>
                 <li><a href="{{ url_for('view_passengers') }}">View Passengers</a></li>
+                <li><a href="{{ url_for('passengers_board') }}">Board Passengers</a></li>
+                <li><a href="{{ url_for('passengers_disembark') }}">Disembark Passengers</a></li>
                 <li><a href="{{ url_for('add_person') }}">Add New Person</a></li>
                 <li><a href="{{ url_for('people_in_the_air') }}">People in the Air</a></li>
                 <li><a href="{{ url_for('people_on_the_ground') }}">People on the Ground</a></li>
+                
             </ul>
         </div>
 
@@ -162,6 +167,7 @@
             <ul class="route-list">
                 <li><a href="{{ url_for('offer_flight') }}">Offer New Flight</a></li>
                 <li><a href="{{ url_for('retire_flight') }}">Retire a Flight</a></li>
+                <li><a href="{{ url_for('recycle_crew') }}">Recycle Crew</a></li>
                 <li><a href="{{ url_for('flights_in_the_air') }}">Flights in the Air</a></li>
                 <li><a href="{{ url_for('flights_on_the_ground') }}">Flights on the Ground</a></li>
                 <li><a href="{{ url_for('flight_takeoff') }}">Flight Takeoff</a></li>

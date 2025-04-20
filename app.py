@@ -136,7 +136,7 @@ def people_on_the_ground():
 def view_passengers():
 	try:
 		cursor = db_connection.cursor()
-		cursor.execute('SELECT * FROM person join passenger on person.personID = passenger.personID')
+		cursor.execute('SELECT person.personID, first_name, last_name, locationID, miles, funds FROM person join passenger on person.personID = passenger.personID')
 		people = cursor.fetchall()
 		column_names = [desc[0] for desc in cursor.description]
 		# print(people)
@@ -218,7 +218,7 @@ def passengers_disembark():
 def view_pilots():
 	try:
 		cursor = db_connection.cursor()
-		cursor.execute('SELECT * FROM person join pilot on person.personID = pilot.personID')
+		cursor.execute('SELECT person.personID, first_name, last_name, locationID, taxID, experience, commanding_flight FROM person join pilot on person.personID = pilot.personID')
 		people = cursor.fetchall()
 		column_names = [desc[0] for desc in cursor.description]
 		# print(people)
@@ -229,8 +229,54 @@ def view_pilots():
 	finally:
 		cursor.close()
 
-#TODO: grant_or_revoke_pilot_license
+#view_licenses page
+@app.route('/view_licenses', methods=['GET', 'POST'])
+def view_licenses():
+	try:
+		cursor = db_connection.cursor()
+		cursor.execute('SELECT pilot_licenses.personID, first_name, last_name, license  FROM pilot_licenses join person on pilot_licenses.personID = person.personID')
+		licenses = cursor.fetchall()
+		column_names = [desc[0] for desc in cursor.description]
+		return render_template('view_licenses.html', licenses=licenses, headers=column_names)
+	except Exception as e:
+		flash(f"Error fetching licenses: {e}")
+		return redirect(url_for('index'))
+	finally:
+		cursor.close()
 
+#grant_or_revoke_pilot_license page
+@app.route('/grant_or_revoke_pilot_license', methods=['GET', 'POST'])
+def grant_or_revoke_pilot_license():
+	if request.method == 'POST':
+		cursor = None
+		try:
+			personID = normalize(request.form['personID'])
+			license = normalize(request.form['license'])
+
+			cursor = db_connection.cursor()
+			#the command next to flightID is load bearing. Do not remove it.
+			cursor.callproc('grant_or_revoke_pilot_license', (personID, license))
+
+			#db_connection.commit()
+
+			result = list(cursor.fetchall())
+			#print(result)
+			if cursor.description:
+				column_names = [desc[0] for desc in cursor.description]
+			#print(column_names)
+			if result and column_names:
+				if 'error_message' in column_names:
+					flash(result[0][0].strip("(),'"))
+			else:
+				flash('Pilot license changed successfully!')
+		except Exception as e:
+			flash(f"Error changing license: {e}")
+		finally:
+			if cursor:
+				cursor.close()
+			db_connection.commit()
+		return redirect(url_for('view_licenses'))
+	return render_template('grant_or_revoke_pilot_license.html')
 
 #TODO: assign_pilot
 
@@ -253,7 +299,7 @@ def view_flights():
 	finally:
 		cursor.close()
 
-#TODO: recycle_crew
+#recycle_crew page
 @app.route('/recycle_crew', methods=['GET', 'POST'])
 def recycle_crew():
 	if request.method == 'POST':
@@ -347,7 +393,7 @@ def offer_flight():
 		return redirect(url_for('view_flights'))
 	return render_template('offer_flight.html')
 
-#TODO: retire_flight page
+#retire_flight page
 @app.route('/retire_flight', methods=['GET', 'POST'])
 def retire_flight():
 	if request.method == 'POST':

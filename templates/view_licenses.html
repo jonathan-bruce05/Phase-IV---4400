@@ -5,21 +5,20 @@
 {% endblock %}
 
 {% block action_buttons %}
-    <a href="{{ url_for('view_people') }}"><button>Back to People</button></a>
-    <a href="{{ url_for('view_licenses') }}"><button>View Pilot Licenses</button></a>
+    <a href="{{ url_for('view_pilots') }}"><button>Back to Pilots</button></a>
     <a href="{{ url_for('grant_or_revoke_pilot_license') }}"><button>Grant or Revoke Pilot License</button></a>
 {% endblock %}
 
 {% block content %}
-    <h1>All Pilots</h1>
-    {% if people %}
+    <h1>All Pilot Licenses</h1>
+    {% if licenses %}
         <table border="1">
             <tr>
                 {% for header in headers %}
                     <th>{{ header }}</th>
                 {% endfor %}
             </tr>
-            {% for row in people %}
+            {% for row in licenses %}
                 <tr>
                     {% for cell in row %}
                         <td>{{ cell }}</td>
@@ -28,7 +27,7 @@
             {% endfor %}
         </table>
     {% else %}
-        <p>No pilots found in the database.</p>
+        <p>No licenses found in the database.</p>
     {% endif %}
     <br>
     
