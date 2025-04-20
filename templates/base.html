@@ -11,6 +11,16 @@
             padding: 0;
             background-color: #f5f5f5;
             color: #2c3e50;
+            overflow-x: hidden;
+        }
+        .page-wrapper {
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease-out;
+        }
+        .page-wrapper.loaded {
+            opacity: 1;
+            visibility: visible;
         }
         .nav-bar {
             background-color: #2c3e50;
@@ -151,6 +161,128 @@
             margin: 0;
             font-size: 1.5em;
         }
+        
+        /* Animation styles */
+        @keyframes slideLeft {
+            from {
+                transform: translateX(100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes slideRight {
+            from {
+                transform: translateX(-100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOutLeft {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(-100px);
+                opacity: 0;
+            }
+        }
+
+        @keyframes slideOutRight {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100px);
+                opacity: 0;
+            }
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+        
+        .slide-up {
+            animation: slideLeft 1s ease-out;
+        }
+        
+        .slide-down {
+            animation: slideRight 1s ease-out;
+        }
+
+        .slide-out-left {
+            animation: slideOutLeft 1s ease-out;
+        }
+
+        .slide-out-right {
+            animation: slideOutRight 1s ease-out;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .fade-out {
+            animation: fadeOut 0.5s ease-out;
+        }
+
+        .nav-bar.fade-in, .action-bar.fade-in {
+            opacity: 1;
+        }
+
+        .nav-bar.fade-out, .action-bar.fade-out {
+            opacity: 0;
+        }
+
+        .container.slide-up,
+        .container.slide-down {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .nav-content, .action-content {
+            opacity: 0;
+            transition: opacity 0.3s ease-out;
+        }
+        .nav-content.loaded, .action-content.loaded {
+            opacity: 1;
+        }
+        .page-title, .nav-buttons, .action-buttons {
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: opacity 0.2s ease-out, transform 0.2s ease-out;
+        }
+        .page-title.loaded, .nav-buttons.loaded, .action-buttons.loaded {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .page-title.exit, .nav-buttons.exit, .action-buttons.exit {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
     </style>
 </head>
 <body>
@@ -171,19 +303,150 @@
         </div>
     </div>
 
-    <div class="container">
-        {% with messages = get_flashed_messages() %}
-          {% if messages %}
-            <div class="flash-messages">
-              {% for message in messages %}
-                <p>{{ message }}</p>
-              {% endfor %}
-            </div>
-          {% endif %}
-        {% endwith %}
+    <div class="page-wrapper">
+        <div class="container" id="main-content">
+            {% with messages = get_flashed_messages() %}
+              {% if messages %}
+                <div class="flash-messages">
+                  {% for message in messages %}
+                    <p>{{ message }}</p>
+                  {% endfor %}
+                </div>
+              {% endif %}
+            {% endwith %}
 
-        {% block content %}
-        {% endblock %}
+            {% block content %}
+            {% endblock %}
+        </div>
     </div>
+
+    <script>
+        // Store the current page in session storage
+        if (!sessionStorage.getItem('currentPage')) {
+            sessionStorage.setItem('currentPage', window.location.pathname);
+        }
+        
+        // Function to determine navigation direction
+        function getNavigationDirection() {
+            const currentPage = sessionStorage.getItem('currentPage');
+            const newPage = window.location.pathname;
+            
+            // Define page hierarchy (lower index = higher in hierarchy)
+            const pageHierarchy = {
+                '/': 0,
+                '/index': 0,
+                '/view_people': 1,
+                '/view_flights': 1,
+                '/view_airplanes': 1,
+                '/view_airports': 1,
+                '/view_pilots': 2,
+                '/view_passengers': 2,
+                '/people_in_the_air': 2,
+                '/people_on_the_ground': 2,
+                '/flights_in_the_air': 2,
+                '/flights_on_the_ground': 2,
+                '/add_person': 2,
+                '/add_airplane': 2,
+                '/add_airport': 2,
+                '/offer_flight': 2,
+                '/flight_takeoff': 3,
+                '/flight_landing': 3,
+                '/passengers_board': 3,
+                '/passengers_disembark': 3,
+                '/recycle_crew': 3,
+                '/alternative_airports': 2,
+                '/route_summary': 2
+            };
+            
+            // Get hierarchy levels
+            const currentLevel = pageHierarchy[currentPage] || 0;
+            const newLevel = pageHierarchy[newPage] || 0;
+            
+            // Determine direction
+            if (newLevel < currentLevel) {
+                return 'up';  // Will trigger slideLeft animation
+            } else if (newLevel > currentLevel) {
+                return 'down';  // Will trigger slideRight animation
+            } else {
+                // Same level, check if it's a "back" button
+                if (newPage.includes('view_') && !currentPage.includes('view_')) {
+                    return 'up';  // Will trigger slideLeft animation
+                } else {
+                    return 'down';  // Will trigger slideRight animation
+                }
+            }
+        }
+        
+        // Handle page load and animations
+        document.addEventListener('DOMContentLoaded', function() {
+            const pageWrapper = document.querySelector('.page-wrapper');
+            const pageTitle = document.querySelector('.page-title');
+            const navButtons = document.querySelector('.nav-buttons');
+            const actionButtons = document.querySelector('.action-buttons');
+            const direction = getNavigationDirection();
+            const container = document.getElementById('main-content');
+            
+            // Add slide animation to main content
+            if (direction === 'up') {
+                container.classList.add('slide-up');
+            } else if (direction === 'down') {
+                container.classList.add('slide-down');
+            }
+            
+            // Show the page and content after a brief delay
+            setTimeout(() => {
+                pageWrapper.classList.add('loaded');
+                pageTitle.classList.add('loaded');
+                navButtons.classList.add('loaded');
+                actionButtons.classList.add('loaded');
+            }, 100);
+            
+            // Update current page in session storage
+            sessionStorage.setItem('currentPage', window.location.pathname);
+        });
+        
+        // Add click event listeners to all buttons
+        document.addEventListener('DOMContentLoaded', function() {
+            const buttons = document.querySelectorAll('button');
+            buttons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    // Only handle buttons that navigate
+                    if (this.closest('a')) {
+                        const link = this.closest('a');
+                        if (link.href && !link.href.includes('#')) {
+                            e.preventDefault(); // Prevent immediate navigation
+                            
+                            const pageWrapper = document.querySelector('.page-wrapper');
+                            const pageTitle = document.querySelector('.page-title');
+                            const navButtons = document.querySelector('.nav-buttons');
+                            const actionButtons = document.querySelector('.action-buttons');
+                            const container = document.getElementById('main-content');
+                            const direction = getNavigationDirection();
+                            
+                            // Add exit animations
+                            if (direction === 'up') {
+                                container.classList.add('slide-out-right');
+                            } else if (direction === 'down') {
+                                container.classList.add('slide-out-left');
+                            }
+                            
+                            // Add exit animations to buttons
+                            pageTitle.classList.add('exit');
+                            navButtons.classList.add('exit');
+                            actionButtons.classList.add('exit');
+                            
+                            // Hide the page wrapper
+                            pageWrapper.classList.remove('loaded');
+                            
+                            // Navigate after animation completes
+                            setTimeout(() => {
+                                window.location.href = link.href;
+                            }, 1000); // Match animation duration
+                        }
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
