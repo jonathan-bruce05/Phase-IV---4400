@@ -279,7 +279,39 @@ def grant_or_revoke_pilot_license():
 	return render_template('grant_or_revoke_pilot_license.html')
 
 #TODO: assign_pilot
+@app.route('/assign_pilot', methods=['GET', 'POST'])
+def assign_pilot():
+	if request.method == 'POST':
+		cursor = None
+		try:
+			flightID = normalize(request.form['flightID'])
+			personID = normalize(request.form['personID'])
 
+
+			cursor = db_connection.cursor()
+			#the command next to flightID is load bearing. Do not remove it.
+			cursor.callproc('assign_pilot', (flightID, personID))
+
+			#db_connection.commit()
+
+			result = list(cursor.fetchall())
+			#print(result)
+			if cursor.description:
+				column_names = [desc[0] for desc in cursor.description]
+			#print(column_names)
+			if result and column_names:
+				if 'error_message' in column_names:
+					flash(result[0][0].strip("(),'"))
+			else:
+				flash('Pilot assigned successfully!')
+		except Exception as e:
+			flash(f"Error assigning pilot: {e}")
+		finally:
+			if cursor:
+				cursor.close()
+			db_connection.commit()
+		return redirect(url_for('view_pilots'))
+	return render_template('assign_pilot.html')
 
 
 
