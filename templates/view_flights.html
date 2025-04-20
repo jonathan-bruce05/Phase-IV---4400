@@ -1,9 +1,42 @@
 {% extends "base.html" %}
 
+{% block title %}Flights{% endblock %}
+
+{% block nav_buttons %}
+    <a href="{{ url_for('index') }}">
+        <button>Back to Home</button>
+    </a>
+{% endblock %}
+
+{% block action_buttons %}
+    <a href="{{ url_for('flights_in_the_air') }}">
+        <button>Flights in the Air</button>
+    </a>
+    <a href="{{ url_for('flights_on_the_ground') }}">
+        <button>Flights on the Ground</button>
+    </a>
+    <a href="{{ url_for('route_summary') }}">
+        <button>Route Summary</button>
+    </a>
+    <a href="{{ url_for('flight_landing') }}">
+        <button>Land Flight</button>
+    </a>
+    <a href="{{ url_for('flight_takeoff') }}">
+        <button>Takeoff Flight</button>
+    </a>
+    <a href="{{ url_for('recycle_crew') }}">
+        <button>Recycle Crew</button>
+    </a>
+    <a href="{{ url_for('offer_flight') }}">
+        <button>Offer Flight</button>
+    </a>
+{% endblock %}
+
 {% block content %}
     <h1>All Flights</h1>
+
     {% if flights %}
-        <table border="1">
+        <table>
             <tr>
                 {% for header in headers %}
                     <th>{{ header }}</th>
@@ -20,27 +53,4 @@
     {% else %}
         <p>No flights found in the database.</p>
     {% endif %}
-    <br>
-    <a href="{{ url_for('index') }}"><button>Back to Home</button></a>
-    <a href="{{ url_for('flights_in_the_air') }}">
-        <button style="width: 100%;">View Flights in the Air</button>
-    </a>
-    <a href="{{ url_for('flights_on_the_ground') }}">
-        <button style="width: 100%;">View Flights on the Ground</button>
-    </a>
-    <a href="{{ url_for('route_summary') }}">
-        <button style="width: 100%;">View Route Summary</button>
-    </a>
-
-    <a href="{{ url_for('flight_landing') }}"><button>Land Flight</button></a>
-    <a href="{{ url_for('flight_takeoff') }}"><button>Takeoff Flight</button></a>
-
-    <a href="{{ url_for('recycle_crew') }}">
-        <button style="width: 100%;">Recycle Crew</button>
-    </a>
-
-    <a href="{{ url_for('offer_flight') }}">
-        <button style="width: 100%;">Offer Flight</button>
-    </a>
-
 {% endblock %}

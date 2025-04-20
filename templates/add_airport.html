@@ -1,17 +1,142 @@
 {% extends "base.html" %}
 
-{% block content %}
-<h1>Add New Airport</h1>
-<h2>Don't have a value? Please leave it blank or enter NULL</h2>
-<form method="POST">
-    <label>Airport ID (3 letter code): <input type="text" name="airportID" maxlength="3" required></label><br>
-    <label>Airport Name: <input type="text" name="name" maxlength="200" required></label><br>
-    <label>City: <input type="text" name="city" maxlength="100" required></label><br>
-    <label>State: <input type="text" name="state" maxlength="100" required></label><br>
-    <label>Country (3 letter code): <input type="text" name="country" maxlength="3" required></label><br>
-    <label>Location ID: <input type="text" name="locID" maxlength="50" required></label>
+{% block title %}Add Airport{% endblock %}
 
-    <button type="submit">Submit</button>
-    <a href="{{ url_for('view_airplanes') }}"><button type="button">Cancel</button></a>
-</form>
+{% block nav_buttons %}
+    <a href="{{ url_for('index') }}">
+        <button>Back to Home</button>
+    </a>
+{% endblock %}
+
+{% block action_buttons %}
+    <a href="{{ url_for('view_airports') }}">
+        <button>Back to Airports</button>
+    </a>
+{% endblock %}
+
+{% block content %}
+<style>
+    .form-container {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+        margin-bottom: 20px;
+    }
+    .form-section {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+    }
+    .form-section h3 {
+        color: #2c3e50;
+        margin-top: 0;
+        margin-bottom: 15px;
+        border-bottom: 2px solid #3498db;
+        padding-bottom: 5px;
+    }
+    .form-group {
+        margin-bottom: 15px;
+    }
+    .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: 600;
+    }
+    .form-group input {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+    .form-actions {
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+        margin-top: 20px;
+    }
+    .note {
+        background-color: #fff3cd;
+        border-left: 4px solid #ffc107;
+        padding: 15px;
+        margin-bottom: 20px;
+        border-radius: 4px;
+    }
+    .help-text {
+        font-size: 0.85em;
+        color: #6c757d;
+        margin-top: 4px;
+    }
+</style>
+
+<div class="form-container">
+    <h1>Add New Airport</h1>
+    <div class="note">
+        <strong>Note:</strong> Don't have a value? Please leave it blank or enter NULL
+    </div>
+    
+    <form method="POST" id="airportForm">
+        <div class="form-section">
+            <h3>Airport Identification</h3>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Airport ID:</label>
+                    <input type="text" name="airportID" maxlength="3" required 
+                           pattern="[A-Z]{3}" 
+                           title="Must be exactly 3 uppercase letters"
+                           style="text-transform: uppercase;">
+                    <div class="help-text">3-letter IATA code (e.g., ATL, LAX)</div>
+                </div>
+                <div class="form-group">
+                    <label>Airport Name:</label>
+                    <input type="text" name="name" maxlength="200" 
+                           pattern="[A-Za-z0-9\s\-_']+" 
+                           title="Only letters, numbers, spaces, hyphens, underscores, and apostrophes allowed">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h3>Location Details</h3>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>City:</label>
+                    <input type="text" name="city" maxlength="100" required 
+                           pattern="[A-Za-z\s\-']+" 
+                           title="Only letters, spaces, hyphens, and apostrophes allowed">
+                </div>
+                <div class="form-group">
+                    <label>State:</label>
+                    <input type="text" name="state" maxlength="100" required 
+                           pattern="[A-Za-z\s\-]+" 
+                           title="Only letters, spaces, and hyphens allowed">
+                </div>
+                <div class="form-group">
+                    <label>Country:</label>
+                    <input type="text" name="country" maxlength="3" required 
+                           pattern="[A-Z]{3}" 
+                           title="Must be exactly 3 uppercase letters"
+                           style="text-transform: uppercase;">
+                    <div class="help-text">3-letter country code (e.g., USA, GBR)</div>
+                </div>
+                <div class="form-group">
+                    <label>Location ID:</label>
+                    <input type="text" name="locID" maxlength="50" required 
+                           pattern="[A-Za-z0-9_]+" 
+                           title="Only letters, numbers, and underscores allowed">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <a href="{{ url_for('view_airports') }}"><button type="button">Cancel</button></a>
+            <button type="submit">Submit</button>
+        </div>
+    </form>
+</div>
 {% endblock %}

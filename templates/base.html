@@ -3,19 +3,187 @@
 <head>
     <meta charset="UTF-8">
     <title>Database Manager</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #2c3e50;
+        }
+        .nav-bar {
+            background-color: #2c3e50;
+            padding: 15px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .action-bar {
+            background-color: #34495e;
+            padding: 10px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .nav-container, .action-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .nav-buttons, .action-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .nav-buttons button {
+            background-color: #3498db;
+            border: 1px solid #3498db;
+            color: white;
+        }
+        .nav-buttons button:hover {
+            background-color: #3477db;
+            border: 1px solid white;
+            color: white;
+        }
+        .action-buttons button {
+            background-color: #3498db;
+            border: 1px solid #3498db;
+            color: white;
+        }
+        .action-buttons button:hover {
+            background-color: #3477db;
+            border: 1px solid white;
+            color: white;
+        }
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background-color: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        button {
+            background-color: #3498db;
+            border: 1px solid #3498db;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 5px;
+            transition: all 0.3s;
+        }
+        button:hover {
+            background-color: #3498db;
+            border: 1px solid #34495e;
+            color: white;
+        }
+        .flash-messages {
+            background-color: #ffebee;
+            color: #c62828;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            border-left: 4px solid #c62828;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-top: 20px;
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        form {
+            background-color: #34495e;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        input[type="text"],
+        input[type="number"],
+        input[type="password"] {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        label {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        .page-title {
+            color: white;
+            margin: 0;
+            font-size: 1.5em;
+        }
+    </style>
 </head>
 <body>
-    {% with messages = get_flashed_messages() %}
-      {% if messages %}
-        <ul style="color: red;">
-          {% for message in messages %}
-            <li>{{ message }}</li>
-          {% endfor %}
-        </ul>
-      {% endif %}
-    {% endwith %}
+    <div class="nav-bar">
+        <div class="nav-container">
+            <h1 class="page-title">{% block title %}Database Manager{% endblock %}</h1>
+            <div class="nav-buttons">
+                {% block nav_buttons %}{% endblock %}
+            </div>
+        </div>
+    </div>
 
-    {% block content %}
-    {% endblock %}
+    <div class="action-bar">
+        <div class="action-container">
+            <div class="action-buttons">
+                {% block action_buttons %}{% endblock %}
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <div class="flash-messages">
+              {% for message in messages %}
+                <p>{{ message }}</p>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+
+        {% block content %}
+        {% endblock %}
+    </div>
 </body>
 </html>

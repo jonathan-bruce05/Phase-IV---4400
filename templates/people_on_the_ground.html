@@ -1,26 +1,57 @@
 {% extends "base.html" %}
 
+{% block title %}People on the Ground{% endblock %}
+
+{% block nav_buttons %}
+    <a href="{{ url_for('index') }}">
+        <button>Back to Home</button>
+    </a>
+{% endblock %}
+
+{% block action_buttons %}
+    <a href="{{ url_for('view_people') }}">
+        <button>Back to People</button>
+    </a>
+{% endblock %}
+
 {% block content %}
+<style>
+    .table-wrapper {
+        width: 100%;
+        overflow-x: auto;
+        margin: 20px 0;
+    }
+    table {
+        min-width: 100%;
+        white-space: nowrap;
+    }
+    td, th {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 300px;
+    }
+</style>
+
     <h1>People on the Ground</h1>
     {% if people %}
-        <table border="1">
-            <tr>
-                {% for header in headers %}
-                    <th>{{ header }}</th>
-                {% endfor %}
-            </tr>
-            {% for row in people %}
+        <div class="table-wrapper">
+            <table>
                 <tr>
-                    {% for cell in row %}
-                        <td>{{ cell }}</td>
+                    {% for header in headers %}
+                        <th>{{ header }}</th>
                     {% endfor %}
                 </tr>
-            {% endfor %}
-        </table>
+                {% for row in people %}
+                    <tr>
+                        {% for cell in row %}
+                            <td>{{ cell }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
     {% else %}
         <p>No people on the ground in the database.</p>
     {% endif %}
-    <br>
-    <a href="{{ url_for('index') }}"><button>Back to Home</button></a>
-    <a href="{{ url_for('view_people') }}"><button>Back to People</button></a>
 {% endblock %}

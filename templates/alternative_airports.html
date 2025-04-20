@@ -1,5 +1,19 @@
 {% extends "base.html" %}
 
+{% block title %}Alternative Airports{% endblock %}
+
+{% block nav_buttons %}
+    <a href="{{ url_for('index') }}">
+        <button>Back to Home</button>
+    </a>
+{% endblock %}
+
+{% block action_buttons %}
+    <a href="{{ url_for('view_airports') }}">
+        <button>Back to Airports</button>
+    </a>
+{% endblock %}
+
 {% block content %}
     <h1>Alternative Airports</h1>
     {% if airports %}
@@ -21,6 +35,4 @@
         <p>No airports found in the database.</p>
     {% endif %}
     <br>
-    <a href="{{ url_for('index') }}"><button>Back to Home</button></a>
-    <a href="{{ url_for('view_airports') }}"><button>Back to Airports</button></a>
 {% endblock %}

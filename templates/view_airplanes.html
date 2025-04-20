@@ -1,9 +1,24 @@
 {% extends "base.html" %}
 
+{% block title %}Airplanes{% endblock %}
+
+{% block nav_buttons %}
+    <a href="{{ url_for('index') }}">
+        <button>Back to Home</button>
+    </a>
+{% endblock %}
+
+{% block action_buttons %}
+    <a href="{{ url_for('add_airplane') }}">
+        <button>Add New Airplane</button>
+    </a>
+{% endblock %}
+
 {% block content %}
     <h1>All Airplanes</h1>
+
     {% if airplanes %}
-        <table border="1">
+        <table>
             <tr>
                 {% for header in headers %}
                     <th>{{ header }}</th>
@@ -20,7 +35,4 @@
     {% else %}
         <p>No airplanes found in the database.</p>
     {% endif %}
-    <br>
-    <a href="{{ url_for('index') }}"><button>Back to Home</button></a>
-    <a href="{{ url_for('add_airplane') }}"><button>Add New Airplane</button></a>
 {% endblock %}

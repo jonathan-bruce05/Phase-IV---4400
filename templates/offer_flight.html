@@ -1,26 +1,195 @@
 {% extends "base.html" %}
 
+{% block title %}Offer Flight{% endblock %}
+
+{% block nav_buttons %}
+    <a href="{{ url_for('index') }}">
+        <button>Back to Home</button>
+    </a>
+{% endblock %}
+
+{% block action_buttons %}
+    <a href="{{ url_for('view_flights') }}">
+        <button>Back to Flights</button>
+    </a>
+{% endblock %}
+
 {% block content %}
-<h1>Offer Flight</h1>
-<h2>Don't have a value? Please leave it blank or enter NULL</h2>
-<form method="POST">
-    <label>Flight ID: <input type="text" name="flightID" maxlength="50" required></label><br>
-    <label>Route ID: <input type="text" name="routeID" maxlength="50" required></label><br>
-    <label>Support Airline: <input type="text" name="support_airline" maxlength="50" required></label><br>
-    <label>Support Tail: <input type="text" name="support_tail" maxlength="50" required></label><br>
-    <label>Progress: <input type="text" name="progress" required></label><br>
-    <label>Next Time:
-    <input type="number" name="hours" min="0" max="23" placeholder="HH">
-    :
-    <input type="number" name="minutes" min="0" max="59" placeholder="MM">
-    :
-    <input type="number" name="seconds" min="0" max="59" placeholder="SS"></label><br>
+<style>
+    .form-container {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+        margin-bottom: 20px;
+    }
+    .form-section {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+    }
+    .form-section h3 {
+        color: #2c3e50;
+        margin-top: 0;
+        margin-bottom: 15px;
+        border-bottom: 2px solid #3498db;
+        padding-bottom: 5px;
+    }
+    .form-group {
+        margin-bottom: 15px;
+    }
+    .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: 600;
+    }
+    .form-group input, .form-group select {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+    .time-input {
+        display: flex;
+        gap: 5px;
+        align-items: center;
+    }
+    .time-input input {
+        width: 70px;
+        text-align: center;
+    }
+    .form-actions {
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+    }
+    .note {
+        background-color: #fff3cd;
+        border-left: 4px solid #ffc107;
+        padding: 15px;
+        margin-bottom: 20px;
+        border-radius: 4px;
+    }
+    .support-fields {
+        transition: opacity 0.3s;
+    }
+    .support-fields.disabled {
+        opacity: 0.5;
+        pointer-events: none;
+    }
+</style>
 
-    <label>Cost: <input type="text" name="cost" required></label><br>
-
+<div class="form-container">
+    <h1>Offer Flight</h1>
+    <div class="note">
+        <strong>Note:</strong> Don't have a value? Please leave it blank or enter NULL
+    </div>
     
+    <form method="POST" id="flightForm">
+        <div class="form-section">
+            <h3>Flight Information</h3>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Flight ID:</label>
+                    <input type="text" name="flightID" maxlength="50" required pattern="[A-Za-z0-9_]+" title="Only letters, numbers, and underscores allowed">
+                </div>
+                <div class="form-group">
+                    <label>Route ID:</label>
+                    <input type="text" name="routeID" maxlength="50" required pattern="[A-Za-z0-9_]+" title="Only letters, numbers, and underscores allowed">
+                </div>
+            </div>
+        </div>
 
-    <button type="submit">Submit</button>
-    <a href="{{ url_for('view_people') }}"><button type="button">Cancel</button></a>
-</form>
+        <div class="form-section">
+            <h3>Aircraft Support</h3>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Support Airline:</label>
+                    <input type="text" name="support_airline" maxlength="50" pattern="[A-Za-z0-9_]+" title="Only letters, numbers, and underscores allowed">
+                </div>
+                <div class="form-group">
+                    <label>Support Tail:</label>
+                    <input type="text" name="support_tail" maxlength="50" pattern="[A-Za-z0-9]+" title="Only letters and numbers allowed">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h3>Flight Status</h3>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Progress:</label>
+                    <input type="number" name="progress" required min="0" title="Must be 0 or a valid sequence number">
+                </div>
+                <div class="form-group">
+                    <label>Cost:</label>
+                    <input type="number" name="cost" required min="0" title="Must be 0 or greater">
+                </div>
+                <div class="form-group" style="grid-column: span 2;">
+                    <label>Next Time:</label>
+                    <div class="time-input">
+                        <input type="number" name="hours" min="0" max="23" placeholder="HH" required>
+                        <span>:</span>
+                        <input type="number" name="minutes" min="0" max="59" placeholder="MM" required>
+                        <span>:</span>
+                        <input type="number" name="seconds" min="0" max="59" placeholder="SS" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <a href="{{ url_for('view_flights') }}"><button type="button">Cancel</button></a>
+            <button type="submit">Submit</button>
+        </div>
+    </form>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('flightForm');
+    const supportAirline = form.querySelector('[name="support_airline"]');
+    const supportTail = form.querySelector('[name="support_tail"]');
+
+    // Function to check if both support fields are filled or both are empty
+    function validateSupportFields() {
+        const airlineValue = supportAirline.value.trim();
+        const tailValue = supportTail.value.trim();
+        
+        if ((airlineValue && !tailValue) || (!airlineValue && tailValue)) {
+            return false;
+        }
+        return true;
+    }
+
+    // Add form validation
+    form.addEventListener('submit', function(e) {
+        if (!validateSupportFields()) {
+            e.preventDefault();
+            alert('Both Support Airline and Support Tail must be either filled or empty');
+        }
+    });
+
+    // Add input listeners to enforce mutual dependency
+    [supportAirline, supportTail].forEach(input => {
+        input.addEventListener('input', function() {
+            if (this.value.trim()) {
+                supportAirline.required = true;
+                supportTail.required = true;
+            } else {
+                const otherField = this === supportAirline ? supportTail : supportAirline;
+                if (!otherField.value.trim()) {
+                    supportAirline.required = false;
+                    supportTail.required = false;
+                }
+            }
+        });
+    });
+});
+</script>
 {% endblock %}

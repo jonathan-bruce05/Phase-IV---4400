@@ -1,5 +1,17 @@
 {% extends "base.html" %}
 
+{% block title %}Flights on the Ground{% endblock %}
+
+{% block nav_buttons %}
+    <a href="{{ url_for('index') }}">
+        <button>Back to Home</button>
+    </a>
+{% endblock %}
+{% block action_buttons %}
+    <a href="{{ url_for('view_flights') }}">
+        <button>Back to Flights</button>
+    </a>
+{% endblock %}
 {% block content %}
     <h1>Flights on the Ground</h1>
     {% if flights %}
@@ -21,6 +33,4 @@
         <p>No flights in the air in the database.</p>
     {% endif %}
     <br>
-    <a href="{{ url_for('index') }}"><button>Back to Home</button></a>
-    <a href="{{ url_for('view_flights') }}"><button>Back to Flights</button></a>
 {% endblock %}

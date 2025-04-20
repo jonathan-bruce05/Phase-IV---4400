@@ -1,12 +1,81 @@
 {% extends "base.html" %}
 
-{% block content %}
-<h1>Land a Flight</h1>
-<h2>Don't have a value? Please leave it blank or enter NULL</h2>
-<form method="POST">
-    <label>Flight ID: <input type="text" name="flightID" maxlength="50" required></label><br>
+{% block title %}Land a Flight{% endblock %}
 
-    <button type="submit">Submit</button>
-    <a href="{{ url_for('view_flights') }}"><button type="button">Cancel</button></a>
-</form>
+{% block nav_buttons %}
+    <a href="{{ url_for('index') }}">
+        <button>Back to Home</button>
+    </a>
+{% endblock %}
+
+{% block action_buttons %}
+    <a href="{{ url_for('view_flights') }}">
+        <button>Back to Flights</button>
+    </a>
+{% endblock %}
+
+{% block content %}
+<style>
+    .form-container {
+        max-width: 600px;
+        margin: 0 auto;
+    }
+    .form-section {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+    }
+    .form-group {
+        margin-bottom: 15px;
+    }
+    .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: 600;
+    }
+    .form-group input {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+    .form-actions {
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+        margin-top: 20px;
+    }
+    .note {
+        background-color: #fff3cd;
+        border-left: 4px solid #ffc107;
+        padding: 15px;
+        margin-bottom: 20px;
+        border-radius: 4px;
+    }
+</style>
+
+<div class="form-container">
+    <h1>Land a Flight</h1>
+    <div class="note">
+        <strong>Note:</strong> Don't have a value? Please leave it blank or enter NULL
+    </div>
+    
+    <form method="POST">
+        <div class="form-section">
+            <div class="form-group">
+                <label>Flight ID:</label>
+                <input type="text" name="flightID" maxlength="50" required 
+                       pattern="[A-Za-z0-9_]+" 
+                       title="Only letters, numbers, and underscores allowed">
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <a href="{{ url_for('view_flights') }}"><button type="button">Cancel</button></a>
+            <button type="submit">Submit</button>
+        </div>
+    </form>
+</div>
 {% endblock %}

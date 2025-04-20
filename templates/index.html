@@ -1,25 +1,189 @@
-
 {% extends "base.html" %}
 
+{% block title %}Database Manager{% endblock %}
+
 {% block content %}
+<style>
+    .main-buttons {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        margin: 10px 0;
+        background-color: #e9e9ec;
+        border-radius: 8px;
+        padding: 10px;
+        border: 3px solid #2c3e50
+    }
+    .main-buttons a {
+        flex: 1;
+        
+    }
+    .main-buttons button {
+        width: 100%;
+        padding: 15px;
+        font-size: 16px;
+        background-color: #3498db;
+        border: 3px solid #3498db;
+        color: white;
+        
+    }
+
+    .sub-text {
+        font-size: 16px;
+        color: #2c3e50;
+        margin-bottom: 10px;
+        font-weight: 600;
+    }
+
+    .main-buttons button:hover {
+        width: 100%;
+        padding: 15px;
+        font-size: 16px;
+        background-color: #3477db;
+        border: 3px solid #3477db;
+    }
+    .routes-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+        margin-top: 10px;
+    }
+    .route-column {
+        background: #e9e9ec;
+        padding: 20px;
+        border-radius: 8px;
+        border: 3px solid #2c3e50;
+    }
+    .route-column h3 {
+        color: #2c3e50;
+        margin-top: 0;
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #2c3e50;
+    }
+    .route-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    .route-list li {
+        margin-bottom: 5px;
+    }
+    .route-list a {
+        color: #3498db;
+        text-decoration: none;
+        display: block;
+        padding: 5px 5px;
+        font-weight: 600;
+    }
+    .route-list a:hover {
+        color: #2980b9;
+        background-color: #e2e1e1;
+        border-radius: 5px;
+    }
+
+    .authors-container {
+        margin-top: 20px;
+        background-color: #e9e9ec;
+        border-radius: 8px;
+        padding-top: 1px;
+        padding-inline: 10px;
+        color: #2c3e50;
+        padding-bottom: 0px;
+        border: 3px solid #2c3e50;
+    }
+
+    .authors-title {
+        color: #2c3e50;
+        font-weight: 600;
+        padding-top: 2px;
+        padding-bottom: 2px;
+        border-bottom: 2px solid #2c3e50;
+    }
+
+    .authors-list {
+        margin-bottom: 2px;
+        color: #3498db;
+        font-weight: 600;
+    }
+
+    .authors-text {
+        color: #2c3e50;
+        font-weight: 600;
+        padding-top: 0px;
+    }
+</style>
+
     <h1>Welcome to the Database Manager</h1>
-
-    <p>Select a section to view or manage data:</p>
-
-    <div style="display: flex; flex-direction: column; gap: 10px; max-width: 300px;">
+    
+    <p class="sub-text">Select a section to view from the buttons below.</p>
+    
+    <div class="main-buttons">
         <a href="{{ url_for('view_people') }}">
-            <button style="width: 100%;">View All People</button>
+            <button>View All People</button>
         </a>
         <a href="{{ url_for('view_flights') }}">
-            <button style="width: 100%;">View Flights</button>
+            <button>View Flights</button>
         </a>
         <a href="{{ url_for('view_airplanes') }}">
-            <button style="width: 100%;">View Airplanes</button>
+            <button>View Airplanes</button>
         </a>
         <a href="{{ url_for('view_airports') }}">
-            <button style="width: 100%;">View Airports</button>
+            <button>View Airports</button>
         </a>
-		
+    </div>
+
+    <p class="sub-text">For more specific functions, please use list below.</p>
+
+    <div class="routes-grid">
+        <div class="route-column">
+            <h3>People Management</h3>
+            <ul class="route-list">
+                <li><a href="{{ url_for('view_pilots') }}">View Pilots</a></li>
+                <li><a href="{{ url_for('view_passengers') }}">View Passengers</a></li>
+                <li><a href="{{ url_for('add_person') }}">Add New Person</a></li>
+                <li><a href="{{ url_for('people_in_the_air') }}">People in the Air</a></li>
+                <li><a href="{{ url_for('people_on_the_ground') }}">People on the Ground</a></li>
+            </ul>
+        </div>
+
+        <div class="route-column">
+            <h3>Flight Management</h3>
+            <ul class="route-list">
+                <li><a href="{{ url_for('offer_flight') }}">Offer New Flight</a></li>
+                <li><a href="{{ url_for('flights_in_the_air') }}">Flights in the Air</a></li>
+                <li><a href="{{ url_for('flights_on_the_ground') }}">Flights on the Ground</a></li>
+                <li><a href="{{ url_for('flight_takeoff') }}">Flight Takeoff</a></li>
+                <li><a href="{{ url_for('flight_landing') }}">Flight Landing</a></li>
+            </ul>
+        </div>
+
+        <div class="route-column">
+            <h3>Airplane Management</h3>
+            <ul class="route-list">
+                <li><a href="{{ url_for('add_airplane') }}">Add New Airplane</a></li>
+            </ul>
+        </div>
+
+        <div class="route-column">
+            <h3>Airport Management</h3>
+            <ul class="route-list">
+                <li><a href="{{ url_for('add_airport') }}">Add New Airport</a></li>
+                <li><a href="{{ url_for('alternative_airports') }}">Alternative Airports</a></li>
+                <li><a href="{{ url_for('route_summary') }}">Route Summary</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="authors-container">
+        <h2 class="authors-title">Authors</h3>
+        <p class="authors-text">This project was created by:</p>
+        <ul>
+            <li class="authors-list">Jonathan Bruce</li>
+            <li class="authors-list">Devan Taal Gandhi</li>
+            <li class="authors-list">Yonathan Terefe Gashu</li>
+            <li class="authors-list">Christopher Ling</li>
+        </ul>
     </div>
 
 {% endblock %}

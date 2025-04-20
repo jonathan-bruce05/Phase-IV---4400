@@ -1,5 +1,19 @@
 {% extends "base.html" %}
 
+{% block title %}Route Summary{% endblock %}
+
+{% block nav_buttons %}
+    <a href="{{ url_for('index') }}">
+        <button>Back to Home</button>
+    </a>
+{% endblock %}
+
+{% block action_buttons %}
+    <a href="{{ url_for('view_flights') }}">
+        <button>Back to Flights</button>
+    </a>
+{% endblock %}
+
 {% block content %}
     <h1>Route Summary</h1>
     {% if routes %}
@@ -21,6 +35,4 @@
         <p>Route summary not found</p>
     {% endif %}
     <br>
-    <a href="{{ url_for('index') }}"><button>Back to Home</button></a>
-    <a href="{{ url_for('view_flights') }}"><button>Back to Flights</button></a>
 {% endblock %}
