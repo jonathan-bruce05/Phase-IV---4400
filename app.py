@@ -1,10 +1,6 @@
-#Idk what we need yet so I'm just importing a lot for now. I'll clean this up late
-from flask import Flask, url_for, redirect, session, flash, render_template, request
-#import hashlib
+from flask import Flask, url_for, redirect, flash, render_template, request
 import MySQLdb
-#import re
-#import sys
-#import json
+
 
 app = Flask(__name__, static_url_path="")
 app.secret_key = 'flight_tracking'
@@ -15,7 +11,7 @@ def get_db_password():
         return f.read().strip()
 
 db_password = get_db_password()
-#print(db_password)
+
 
 # connect to DB
 db_connection = MySQLdb.connect(host="127.0.0.1",
@@ -24,7 +20,6 @@ db_connection = MySQLdb.connect(host="127.0.0.1",
 						   db = "flight_tracking",
 						   port = 3306)
 
-#helper methods first:
 
 #helper method for forms with possible null or empty values
 def normalize(val):
